@@ -2,10 +2,14 @@ variable "domain" {
   default = "example.com"
 }
 
-resource "cloudflare_record" "www" {
-  zone_id = var.cloudflare_zone_id
-  name    = "www"
-  value   = "example.com"
-  type    = "A"
-  proxied = true
+resource "cloudflare_worker_script" "main_script" {
+  zone = "${var.zone}"
+  content = "${file("src/index.ts")}"
+}
+
+resource "cloudflare_worker_route" "catch_all_route" {
+  zone = "${var.zone}"
+  pattern = "*${var.zone}/*"
+  enabled = true
+  depends_on = ["cloudflare_worker_script.main_script"]
 }
