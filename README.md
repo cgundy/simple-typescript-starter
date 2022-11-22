@@ -1,11 +1,12 @@
 #### Coding Challenge Terraform deployment
 
-App can be run in docker-compose. To deploy it to a cloud, my main experience is based on using ECS tasks to run the docker containers. I tried to think through how I would deploy it to Cloudflare, but got stuck on some points: 
+My main experience with running applications in the cloud has been through containerized applications (primarily ECS) with Docker images. I've only seen Cloudflare used as a load balancer or rate limiter, so I had to do some reading on using cloudflare workers to deploy applications. 
 
-- In the past, I've only seen Cloudflare used as a loadbalancer or rate limiter, not for running containerized applications or databases. I know it's possible to deploy applications directly to the edge and run them there and I read up on some instructions to do this using [wrangler](https://developers.cloudflare.com/workers/) but I wasn't quite sure if this was the point of the exercise.
-- I followed instructions for how to create a basic MySQL database on AWS, though what's obviously still missing is a way for the application to interact with the database. In my experience using ECS tasks, I would create IAM policies to access the database and it was pretty straight-forward since it was all in the AWS environment. I did see [some instructions](https://github.com/cloudflare/worker-template-postgres) for launching a postgres database as part of cloudflare, but again I wasn't sure if that was the purpose of the exercise.
+I followed [this tutorial](https://blog.cloudflare.com/deploy-workers-using-terraform/) for the cloudflare terraform portion, but was a little confused about how to actually get the app loaded onto the worker. It looked like it just needed to be pointed to the relevant script, but I'd imagine that there would still need to be some packaging required for the entire application. I also think I would need to provide an entry point of some sort to run `npm run start`.
 
-See terraform directory for template of what I started, though it is incomplete. 
+I wasn't able to find a way to host a database on cloudflare, but I found [these instructions](https://developers.cloudflare.com/workers/tutorials/query-postgres-from-workers-using-database-connectors) for how to connect to a database. I'm not really sure how you would manage permissions, though, it looked like there might be some option with secrets. I've mainly only worked within the AWS ecosystem where access could be managed with IAM policies. 
+
+See examples in `terraform/` directory. 
 
 -------------
 
